@@ -1,0 +1,54 @@
+﻿@model Rekcja.ViewModels.BorrowerBookIndex
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Borrower</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Borrowers.First().ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Borrowers.First().Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Borrowers.First().Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Borrowers.First().Name, "", new { @class = "text-danger" })
+            </div>
+            <hr />
+            <div class="col-md-10" style="overflow-y: auto; height: 200px">
+                @foreach(var book in Model.Books)
+                {
+                    string check = "";
+                    if(book.BorrowerID != null)
+                    {
+                        check = "checked";
+                    }
+                    <p><input type="checkbox" @check /> @book.Author - "@book.Title"</p>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

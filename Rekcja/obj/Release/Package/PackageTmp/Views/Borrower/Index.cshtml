@@ -1,0 +1,66 @@
+﻿@model Rekcja.ViewModels.BorrowerBookIndex
+
+@{
+    ViewBag.Title = "Borrowers";
+}
+
+<h2>Borrowers</h2>
+
+<p>
+    @Html.ActionLink("Add Borrower", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Borrowers) {
+    string selectedRow = "";
+    if(item.ID == ViewBag.BorrowerID)
+    {
+        selectedRow = "success";
+    }
+    <tr class="@selectedRow">
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Select", "Index", new { id=item.ID}) |
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
+
+@if (Model.Books != null)
+{
+    <h3>Books borrowed by @Model.Borrowers.Where(b => b.ID == ViewBag.BorrowerID).Single().Name</h3>
+
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Borrow date</th>
+        </tr>
+
+        @foreach(var item in Model.Books)
+        {
+            <tr>
+                <td>@Html.ActionLink("Return", "ReturnBook", "Book", new { id=item.ID}, new { })</td>
+                <td>@item.Title</td>
+                <td>
+                @if (item.BorrowDate != null)
+                {
+                    @item.BorrowDate.Value.ToString("dd MMMM yyyy")
+                }
+                </td>
+            </tr>
+        }
+    </table>
+}
